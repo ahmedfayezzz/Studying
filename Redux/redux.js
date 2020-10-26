@@ -1,10 +1,10 @@
 const redux=require('redux')
-const reduxLogger=require('redux-logger')
+// const reduxLogger=require('redux-logger')
 
 const createStore=redux.createStore
 const combineReducers=redux.combineReducers
 const applyMiddleware=redux.applyMiddleware
-const logger = reduxLogger.createLogger()
+// const logger = reduxLogger.createLogger()
 
 const BUY_CAKE='BUY_CAKE'
 const BUY_ICECREAM='BUY_ICECREAM'
@@ -68,7 +68,20 @@ const cackesReducer = (state=initialCackesState,action)=>{
       return state
   }
 }
+function logger({ getState }) {
+  return next => action => {
+    console.log('will dispatch', action)
 
+    // Call the next dispatch method in the middleware chain.
+    const returnValue = next(action)
+
+    console.log('state after dispatch', getState())
+
+    // This will likely be the action itself, unless
+    // a middleware further in chain changed it.
+    return returnValue
+  }
+}
 const rootReducer = combineReducers({
   cake:cackesReducer,
   iceCream:iceCreamReducer
